@@ -51,7 +51,6 @@ class FeedViewModel(
                             hasMore = response.hasMore,
                             isLoading = false,
                             isRefreshing = false,
-                            tags = response.tags.ifEmpty { it.tags },
                         )
                     }
                 },

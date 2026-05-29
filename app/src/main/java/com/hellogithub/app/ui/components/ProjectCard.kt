@@ -65,7 +65,7 @@ fun ProjectCard(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = item.summaryEn ?: item.summary.ifEmpty { item.description },
+                text = item.summaryEn ?: item.summary,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 2,

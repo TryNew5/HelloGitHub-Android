@@ -35,7 +35,7 @@ val networkModule = module {
             coerceInputValues = true
         }
         Retrofit.Builder()
-            .baseUrl("https://api.hellogithub.com")
+            .baseUrl("https://api.hellogithub.com/v1/")
             .client(get())
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()

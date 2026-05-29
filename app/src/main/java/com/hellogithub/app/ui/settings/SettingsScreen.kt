@@ -3,7 +3,7 @@ package com.hellogithub.app.ui.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.OpenInBrowser
+import androidx.compose.material.icons.automirrored.filled.Launch
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,7 +46,7 @@ fun SettingsScreen(
         ListItem(
             headlineContent = { Text("HelloGitHub 官网") },
             supportingContent = { Text("hellogithub.com") },
-            trailingContent = { Icon(Icons.AutoMirrored.Filled.OpenInBrowser, null) },
+            trailingContent = { Icon(Icons.AutoMirrored.Filled.Launch, null) },
         )
         ListItem(
             headlineContent = { Text("基于 HelloGitHub 开源社区") },

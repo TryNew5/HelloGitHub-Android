@@ -30,17 +30,19 @@ data class RepositoryDto(
     @SerialName("lang_color") val langColor: String = "",
     val license: String = "",
     @SerialName("license_lid") val licenseLid: String = "",
+    @SerialName("license_spdx_id") val licenseSpdxId: String = "",
     @SerialName("has_chinese") val hasChinese: Boolean = false,
     @SerialName("is_org") val isOrg: Boolean = false,
-    @SerialName("is_show") val isShow: Boolean = false,
-    @SerialName("is_featured") val isFeatured: Boolean = false,
-    @SerialName("repo_created_at") val repoCreatedAt: String = "",
-    @SerialName("updated_at") val updatedAt: String = "",
-    @SerialName("publish_at") val publishAt: Long = 0,
-    val author: String = "",
-    val tags: List<TagDto> = emptyList(),
     @SerialName("is_active") val isActive: Boolean = false,
     @SerialName("is_claimed") val isClaimed: Boolean = false,
+    @SerialName("volume_name") val volumeName: String = "",
+    @SerialName("repo_created_at") val repoCreatedAt: String = "",
+    @SerialName("updated_at") val updatedAt: String = "",
+    val code: String = "",
+    val author: String = "",
+    val tags: List<TagDto> = emptyList(),
+    @SerialName("share_user") val shareUser: ShareUserDto? = null,
+    @SerialName("claim_user") val claimUser: ShareUserDto? = null,
     @SerialName("image_url") val imageUrl: String? = null,
     @SerialName("author_avatar") val authorAvatar: String = "",
     val homepage: String? = null,
@@ -58,6 +60,13 @@ data class RepositoryDto(
     @SerialName("collect_total") val collectTotal: Int = 0,
     @SerialName("comment_total") val commentTotal: Int = 0,
     @SerialName("praise_rate") val praiseRate: Float = 0f,
+)
+
+@Serializable
+data class ShareUserDto(
+    val uid: String = "",
+    val nickname: String = "",
+    val avatar: String = "",
 )
 
 @Serializable

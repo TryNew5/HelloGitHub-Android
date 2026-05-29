@@ -6,17 +6,20 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PeriodicalListResponse(
     val success: Boolean,
-    val data: List<PeriodicalIssueDto> = emptyList(),
-    val message: String? = null,
+    @SerialName("repo_total") val repoTotal: Int = 0,
+    val categories: List<PeriodicalCategorySummaryDto> = emptyList(),
+    val volumes: List<PeriodicalIssueDto> = emptyList(),
+)
+
+@Serializable
+data class PeriodicalCategorySummaryDto(
+    val name: String,
 )
 
 @Serializable
 data class PeriodicalIssueDto(
-    @SerialName("volume_id") val volumeId: String,
-    val name: String,
-    @SerialName("name_en") val nameEn: String? = null,
-    @SerialName("publish_at") val publishAt: String = "",
-    val description: String = "",
+    val num: Int,
+    val lastmod: String = "",
 )
 
 @Serializable
@@ -28,8 +31,8 @@ data class PeriodicalDetailResponse(
 
 @Serializable
 data class PeriodicalDetailDto(
-    @SerialName("volume_id") val volumeId: String,
-    val name: String,
+    val num: Int = 0,
+    val name: String = "",
     val categories: List<PeriodicalCategoryDto> = emptyList(),
 )
 

@@ -10,7 +10,7 @@ class PeriodicalRepository(private val api: ApiService) {
         api.getPeriodicalList()
     }
 
-    suspend fun getDetail(volumeId: String): Result<PeriodicalDetailResponse> = runCatching {
-        api.getPeriodicalDetail(volumeId)
+    suspend fun getDetail(num: Int): Result<PeriodicalDetailResponse> = runCatching {
+        api.getPeriodicalDetail(num)
     }
 }
