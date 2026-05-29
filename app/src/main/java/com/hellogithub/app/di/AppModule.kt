@@ -4,9 +4,9 @@ import com.hellogithub.app.data.repository.HomeRepository
 import com.hellogithub.app.data.repository.PeriodicalRepository
 import com.hellogithub.app.data.repository.RepoDetailRepository
 import com.hellogithub.app.data.repository.SearchRepository
-// TODO: Uncomment when ViewModels are created (Tasks 9-13)
-// import com.hellogithub.app.ui.feed.FeedViewModel
-// import com.hellogithub.app.ui.detail.DetailViewModel
+import com.hellogithub.app.ui.feed.FeedViewModel
+import com.hellogithub.app.ui.detail.DetailViewModel
+// TODO: Uncomment when ViewModels are created (Tasks 11-13)
 // import com.hellogithub.app.ui.search.SearchViewModel
 // import com.hellogithub.app.ui.periodical.PeriodicalViewModel
 // import com.hellogithub.app.ui.settings.ThemeViewModel
@@ -22,9 +22,10 @@ val appModule = module {
     single { SearchRepository(get()) }
     single { PeriodicalRepository(get()) }
 
-    // ViewModels — TODO: Uncomment when ViewModels are created (Tasks 9-13)
-    // viewModel { FeedViewModel(get()) }
-    // viewModel { DetailViewModel(get()) }
+    // ViewModels
+    viewModel { FeedViewModel(get()) }
+    viewModel { DetailViewModel(get()) }
+    // TODO: Uncomment when ViewModels are created (Tasks 11-13)
     // viewModel { SearchViewModel(get()) }
     // viewModel { PeriodicalViewModel(get()) }
     // viewModel { ThemeViewModel(androidContext()) }
