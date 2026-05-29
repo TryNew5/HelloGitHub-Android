@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 sealed interface SearchUiState {
@@ -35,25 +36,41 @@ class SearchViewModel(
     fun onQueryChanged(newQuery: String) {
         _query.value = newQuery
         searchJob?.cancel()
+        searchJob = null
+
         if (newQuery.isBlank()) {
             _uiState.value = SearchUiState.Idle
             return
         }
+
         searchJob = viewModelScope.launch {
             delay(300)
+
+            // Guard: if this coroutine was cancelled during delay, stop here.
+            // CancellationException from delay() will propagate naturally
+            // because safeApiCall doesn't swallow it.
+
             _uiState.value = SearchUiState.Searching
+
             repository.search(newQuery).fold(
                 onSuccess = { response ->
-                    _uiState.value = if (response.data.isEmpty()) {
-                        SearchUiState.Empty
-                    } else {
-                        SearchUiState.Success(response.data)
+                    // Double-check we're still the active search
+                    _uiState.update {
+                        if (response.data.isEmpty()) SearchUiState.Empty
+                        else SearchUiState.Success(response.data)
                     }
                 },
                 onFailure = { e ->
-                    _uiState.value = SearchUiState.Error(e.message ?: "搜索失败")
+                    _uiState.update {
+                        SearchUiState.Error(e.message ?: "搜索失败")
+                    }
                 },
             )
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        searchJob?.cancel()
     }
 }

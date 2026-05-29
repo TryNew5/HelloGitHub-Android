@@ -2,35 +2,35 @@ package com.hellogithub.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Light Theme
-val PrimaryLight = Color(0xFF2563EB)
-val OnPrimaryLight = Color(0xFFFFFFFF)
-val SecondaryLight = Color(0xFF7C3AED)
+// ── Light Theme: Black & White Minimalist ──
+val PrimaryLight = Color(0xFF1A1A1A)          // near-black for accents
+val OnPrimaryLight = Color(0xFFFFFFFF)         // white on dark
+val SecondaryLight = Color(0xFF666666)         // medium gray
 val OnSecondaryLight = Color(0xFFFFFFFF)
-val BackgroundLight = Color(0xFFF8FAFC)
-val OnBackgroundLight = Color(0xFF0F172A)
-val SurfaceLight = Color(0xFFFFFFFF)
-val OnSurfaceLight = Color(0xFF0F172A)
-val SurfaceVariantLight = Color(0xFFF1F5F9)
-val OnSurfaceVariantLight = Color(0xFF64748B)
-val OutlineLight = Color(0xFFE2E8F0)
+val BackgroundLight = Color(0xFFFAFAFA)        // almost-white bg
+val OnBackgroundLight = Color(0xFF1A1A1A)      // near-black text
+val SurfaceLight = Color(0xFFFFFFFF)           // pure white cards
+val OnSurfaceLight = Color(0xFF1A1A1A)
+val SurfaceVariantLight = Color(0xFFF5F5F5)    // subtle gray surfaces
+val OnSurfaceVariantLight = Color(0xFF888888)  // secondary text
+val OutlineLight = Color(0xFFE5E5E5)           // hairline border
 val ErrorLight = Color(0xFFDC2626)
 
-// Dark Theme
-val PrimaryDark = Color(0xFF3B82F6)
-val OnPrimaryDark = Color(0xFFFFFFFF)
-val SecondaryDark = Color(0xFF8B5CF6)
-val OnSecondaryDark = Color(0xFFFFFFFF)
-val BackgroundDark = Color(0xFF0F172A)
-val OnBackgroundDark = Color(0xFFF1F5F9)
-val SurfaceDark = Color(0xFF1E293B)
-val OnSurfaceDark = Color(0xFFF1F5F9)
-val SurfaceVariantDark = Color(0xFF334155)
-val OnSurfaceVariantDark = Color(0xFF94A3B8)
-val OutlineDark = Color(0xFF475569)
+// ── Dark Theme: Black & White Inverted ──
+val PrimaryDark = Color(0xFFFFFFFF)            // white accents
+val OnPrimaryDark = Color(0xFF1A1A1A)
+val SecondaryDark = Color(0xFFAAAAAA)
+val OnSecondaryDark = Color(0xFF1A1A1A)
+val BackgroundDark = Color(0xFF111111)         // deep black bg
+val OnBackgroundDark = Color(0xFFEEEEEE)
+val SurfaceDark = Color(0xFF1C1C1C)            // dark card
+val OnSurfaceDark = Color(0xFFEEEEEE)
+val SurfaceVariantDark = Color(0xFF2A2A2A)
+val OnSurfaceVariantDark = Color(0xFF999999)
+val OutlineDark = Color(0xFF333333)
 val ErrorDark = Color(0xFFEF4444)
 
-// Language colors (matching GitHub's linguist colors)
+// ── Language colors (GitHub linguist) ──
 val LangColors = mapOf(
     "Python" to Color(0xFF3572A5),
     "Java" to Color(0xFFB07219),

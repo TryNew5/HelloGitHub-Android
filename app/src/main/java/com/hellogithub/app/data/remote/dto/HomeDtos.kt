@@ -14,7 +14,7 @@ data class HomeResponse(
 
 @Serializable
 data class HomeItemDto(
-    @SerialName("item_id") val itemId: String,
+    @SerialName("item_id") val itemId: String = "",
     val rid: String = "",
     @SerialName("full_name") val fullName: String = "",
     val author: String,

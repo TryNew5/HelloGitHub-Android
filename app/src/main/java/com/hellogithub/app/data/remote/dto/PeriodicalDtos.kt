@@ -3,6 +3,8 @@ package com.hellogithub.app.data.remote.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// ── List endpoint (REST API) ──
+
 @Serializable
 data class PeriodicalListResponse(
     val success: Boolean,
@@ -22,24 +24,39 @@ data class PeriodicalIssueDto(
     val lastmod: String = "",
 )
 
-@Serializable
-data class PeriodicalDetailResponse(
-    val success: Boolean,
-    val data: PeriodicalDetailDto? = null,
-    val message: String? = null,
-)
+// ── Detail (scraped from website __NEXT_DATA__) ──
 
 @Serializable
-data class PeriodicalDetailDto(
-    val num: Int = 0,
-    val name: String = "",
-    val categories: List<PeriodicalCategoryDto> = emptyList(),
+data class PeriodicalVolumeResponse(
+    val success: Boolean,
+    val total: Int = 0,
+    @SerialName("page_total") val pageTotal: Int = 0,
+    @SerialName("current_num") val currentNum: Int = 0,
+    @SerialName("publish_at") val publishAt: String = "",
+    val data: List<PeriodicalCategoryDto> = emptyList(),
 )
 
 @Serializable
 data class PeriodicalCategoryDto(
+    @SerialName("category_id") val categoryId: Int = 0,
+    @SerialName("category_name") val categoryName: String,
+    val items: List<PeriodicalItemDto> = emptyList(),
+)
+
+@Serializable
+data class PeriodicalItemDto(
+    val rid: String,
     val name: String,
-    val items: List<HomeItemDto> = emptyList(),
+    @SerialName("full_name") val fullName: String = "",
+    val description: String = "",
+    @SerialName("description_en") val descriptionEn: String? = null,
+    @SerialName("github_url") val githubUrl: String = "",
+    val stars: Int = 0,
+    val forks: Int = 0,
+    val watch: Int = 0,
+    @SerialName("image_url") val imageUrl: String? = null,
+    @SerialName("vote_total") val voteTotal: Int = 0,
+    @SerialName("publish_at") val publishAt: String = "",
 )
 
 @Serializable

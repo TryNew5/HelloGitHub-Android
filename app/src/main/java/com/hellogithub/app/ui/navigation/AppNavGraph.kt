@@ -11,12 +11,14 @@ import com.hellogithub.app.ui.feed.FeedScreen
 import com.hellogithub.app.ui.detail.DetailScreen
 import com.hellogithub.app.ui.search.SearchScreen
 import com.hellogithub.app.ui.periodical.PeriodicalScreen
+import com.hellogithub.app.ui.rank.RankScreen
 import com.hellogithub.app.ui.settings.SettingsScreen
 
 object Routes {
     const val FEED = "feed"
     const val PERIODICAL = "periodical"
     const val SEARCH = "search"
+    const val RANK = "rank"
     const val SETTINGS = "settings"
     const val DETAIL = "detail/{rid}"
 
@@ -45,6 +47,11 @@ fun AppNavGraph(
         }
         composable(Routes.SEARCH) {
             SearchScreen(
+                onNavigateToDetail = { rid -> navController.navigate(Routes.detail(rid)) }
+            )
+        }
+        composable(Routes.RANK) {
+            RankScreen(
                 onNavigateToDetail = { rid -> navController.navigate(Routes.detail(rid)) }
             )
         }

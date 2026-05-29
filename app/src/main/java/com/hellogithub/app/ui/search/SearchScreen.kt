@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.hellogithub.app.data.remote.dto.HomeItemDto
 import com.hellogithub.app.ui.components.ProjectCard
 import org.koin.androidx.compose.koinViewModel
 
@@ -35,7 +36,10 @@ fun SearchScreen(
             shape = MaterialTheme.shapes.large,
         )
 
-        when (uiState) {
+        // Snapshot read ONCE — prevents ClassCastException when state changes
+        // mid-composition (e.g. coroutine sets Searching while we're composing Success).
+        val state = uiState
+        when (state) {
             is SearchUiState.Idle -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -70,7 +74,7 @@ fun SearchScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = (uiState as SearchUiState.Error).message,
+                        text = state.message,
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
@@ -80,10 +84,13 @@ fun SearchScreen(
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    items((uiState as SearchUiState.Success).results) { item ->
+                    items(
+                        items = state.results,
+                        key = { it.rid.ifEmpty { it.itemId }.ifEmpty { it.fullName } },
+                    ) { item ->
                         ProjectCard(
                             item = item,
-                            onClick = { onNavigateToDetail(item.itemId) },
+                            onClick = { onNavigateToDetail(item.rid.ifEmpty { item.itemId }) },
                         )
                     }
                 }

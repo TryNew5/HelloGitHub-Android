@@ -4,10 +4,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,6 +27,7 @@ data class BottomNavItem(
 
 val bottomNavItems = listOf(
     BottomNavItem("首页", Routes.FEED, Icons.Filled.Home, Icons.Outlined.Home),
+    BottomNavItem("榜单", Routes.RANK, Icons.Filled.EmojiEvents, Icons.Outlined.EmojiEvents),
     BottomNavItem("月刊", Routes.PERIODICAL, Icons.Filled.Book, Icons.Outlined.Book),
     BottomNavItem("搜索", Routes.SEARCH, Icons.Filled.Search, Icons.Outlined.Search),
     BottomNavItem("设置", Routes.SETTINGS, Icons.Filled.Settings, Icons.Outlined.Settings),

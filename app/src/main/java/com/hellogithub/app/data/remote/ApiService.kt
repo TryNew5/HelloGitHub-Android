@@ -7,40 +7,38 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("")
+    @GET("v1/")
     suspend fun getHomeItems(
         @Query("sort_by") sortBy: String = "featured",
         @Query("rank_by") rankBy: String? = null,
         @Query("tid") tid: String? = null,
+        @Query("year") year: Int? = null,
+        @Query("month") month: Int? = null,
+        @Query("page") page: Int = 1,
     ): HomeResponse
 
-    @GET("repository/detail/{rid}")
+    @GET("v1/repository/detail/{rid}")
     suspend fun getRepoDetail(
         @Path("rid") rid: String,
     ): RepoDetailResponse
 
-    @GET("search/")
+    @GET("v1/search/")
     suspend fun searchRepos(
         @Query("q") query: String,
         @Query("page") page: Int = 1,
     ): SearchResponse
 
-    @GET("periodical/")
+    @GET("v1/periodical/")
     suspend fun getPeriodicalList(): PeriodicalListResponse
 
-    @GET("periodical/{num}")
-    suspend fun getPeriodicalDetail(
-        @Path("num") num: Int,
-    ): PeriodicalDetailResponse
-
-    @GET("tag/")
+    @GET("v1/tag/")
     suspend fun getTags(
         @Query("sort_by") sortBy: String = "hot",
     ): TagResponse
 
-    @GET("stats/")
+    @GET("v1/stats/")
     suspend fun getStats(): StatsResponse
 
-    @GET("repository/recommend/")
+    @GET("v1/repository/recommend/")
     suspend fun getRecommend(): RecommendResponse
 }

@@ -15,8 +15,10 @@ data class FeedUiState(
     val items: List<HomeItemDto> = emptyList(),
     val tags: List<TagDto> = emptyList(),
     val isLoading: Boolean = true,
+    val isLoadingMore: Boolean = false,
     val isRefreshing: Boolean = false,
     val hasMore: Boolean = false,
+    val currentPage: Int = 1,
     val error: String? = null,
     val selectedTopicId: String = "all",
     val selectedSort: String = "featured",
@@ -35,20 +37,23 @@ class FeedViewModel(
         loadFeed()
     }
 
+    /** First load or filter change — resets page to 1, replaces items. */
     fun loadFeed() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = it.items.isEmpty(), error = null) }
+            _uiState.update { it.copy(isLoading = it.items.isEmpty(), isLoadingMore = false, error = null, currentPage = 1) }
             val state = _uiState.value
             repository.getFeed(
                 sortBy = state.selectedSort,
                 rankBy = state.selectedRank,
                 topicId = state.selectedTopicId.takeIf { it != "all" },
+                page = 1,
             ).fold(
                 onSuccess = { response ->
                     _uiState.update {
                         it.copy(
                             items = response.data,
                             hasMore = response.hasMore,
+                            currentPage = response.page,
                             isLoading = false,
                             isRefreshing = false,
                         )
@@ -59,6 +64,42 @@ class FeedViewModel(
                         it.copy(
                             isLoading = false,
                             isRefreshing = false,
+                            error = e.message ?: "加载失败",
+                        )
+                    }
+                },
+            )
+        }
+    }
+
+    /** Load next page — appends to existing items. */
+    fun loadMore() {
+        val state = _uiState.value
+        if (!state.hasMore || state.isLoadingMore) return
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoadingMore = true, error = null) }
+            val nextPage = state.currentPage + 1
+            repository.getFeed(
+                sortBy = state.selectedSort,
+                rankBy = state.selectedRank,
+                topicId = state.selectedTopicId.takeIf { it != "all" },
+                page = nextPage,
+            ).fold(
+                onSuccess = { response ->
+                    _uiState.update {
+                        it.copy(
+                            items = it.items + response.data,
+                            hasMore = response.hasMore,
+                            currentPage = response.page,
+                            isLoadingMore = false,
+                        )
+                    }
+                },
+                onFailure = { e ->
+                    _uiState.update {
+                        it.copy(
+                            isLoadingMore = false,
                             error = e.message ?: "加载失败",
                         )
                     }

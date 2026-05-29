@@ -21,18 +21,20 @@ fun TopicScrollBar(
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         FilterChip(
             selected = selectedTopicId == "all",
             onClick = { onTopicSelected("all") },
-            label = { Text("All") },
+            label = { Text("全部") },
+            modifier = Modifier.height(28.dp),
         )
         topics.forEach { tag ->
             FilterChip(
                 selected = selectedTopicId == tag.tid,
                 onClick = { onTopicSelected(tag.tid) },
                 label = { Text(tag.nameEn ?: tag.name) },
+                modifier = Modifier.height(28.dp),
             )
         }
     }

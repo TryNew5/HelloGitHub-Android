@@ -3,6 +3,7 @@ package com.hellogithub.app.ui.feed
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
@@ -30,44 +31,49 @@ fun FeedScreen(
             onTopicSelected = { viewModel.selectTopic(it) },
         )
 
-        // Sort + Rank filter row
+        // Sort + Rank chips — merged into one compact row
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             FilterChip(
                 selected = uiState.selectedSort == "featured",
                 onClick = { viewModel.selectSort("featured") },
-                label = { Text("Featured") },
+                label = { Text("精选") },
+                modifier = Modifier.height(28.dp),
             )
             FilterChip(
                 selected = uiState.selectedSort == "all",
                 onClick = { viewModel.selectSort("all") },
-                label = { Text("All") },
+                label = { Text("全部") },
+                modifier = Modifier.height(28.dp),
             )
-            Spacer(modifier = Modifier.width(8.dp))
             FilterChip(
                 selected = uiState.selectedRank == null,
                 onClick = { viewModel.selectRank(null) },
-                label = { Text("Latest") },
+                label = { Text("最新") },
+                modifier = Modifier.height(28.dp),
             )
             FilterChip(
                 selected = uiState.selectedRank == "monthly",
                 onClick = { viewModel.selectRank("monthly") },
-                label = { Text("Monthly") },
+                label = { Text("本月") },
+                modifier = Modifier.height(28.dp),
             )
             FilterChip(
                 selected = uiState.selectedRank == "yearly",
                 onClick = { viewModel.selectRank("yearly") },
-                label = { Text("Yearly") },
+                label = { Text("年度") },
+                modifier = Modifier.height(28.dp),
             )
         }
 
-        Spacer(modifier = Modifier.height(4.dp))
+        // Thin divider instead of empty space
+        HorizontalDivider(modifier = Modifier.padding(top = 8.dp), thickness = 0.5.dp)
 
-        // Content
+        // Content — fills remaining space
         PullToRefreshBox(
             isRefreshing = uiState.isRefreshing,
             onRefresh = { viewModel.refresh() },
@@ -76,12 +82,10 @@ fun FeedScreen(
             when {
                 uiState.isLoading -> {
                     LazyColumn(
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        items(6) {
-                            SkeletonProjectCard()
-                        }
+                        items(6) { SkeletonProjectCard() }
                     }
                 }
                 uiState.error != null && uiState.items.isEmpty() -> {
@@ -98,21 +102,70 @@ fun FeedScreen(
                             style = MaterialTheme.typography.bodyMedium,
                         )
                         Spacer(modifier = Modifier.height(16.dp))
-                        Button(onClick = { viewModel.loadFeed() }) {
+                        OutlinedButton(onClick = { viewModel.loadFeed() }) {
                             Text("重试")
                         }
                     }
                 }
                 else -> {
+                    val listState = rememberLazyListState()
+
+                    val shouldLoadMore = remember {
+                        derivedStateOf {
+                            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                            val totalItems = listState.layoutInfo.totalItemsCount
+                            totalItems > 0 && lastVisible >= totalItems - 3
+                        }
+                    }
+
+                    LaunchedEffect(shouldLoadMore.value) {
+                        if (shouldLoadMore.value && uiState.hasMore && !uiState.isLoadingMore) {
+                            viewModel.loadMore()
+                        }
+                    }
+
                     LazyColumn(
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        state = listState,
+                        contentPadding = PaddingValues(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        items(uiState.items) { item ->
+                        items(
+                            items = uiState.items,
+                            key = { it.rid.ifEmpty { it.itemId }.ifEmpty { it.fullName } },
+                        ) { item ->
                             ProjectCard(
                                 item = item,
-                                onClick = { onNavigateToDetail(item.itemId) },
+                                onClick = { onNavigateToDetail(item.rid.ifEmpty { item.itemId }) },
                             )
+                        }
+
+                        if (uiState.isLoadingMore) {
+                            item(key = "load_more") {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(20.dp),
+                                        strokeWidth = 2.dp,
+                                    )
+                                }
+                            }
+                        }
+
+                        if (!uiState.hasMore && uiState.items.isNotEmpty()) {
+                            item(key = "end_hint") {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = "— 已经到底啦 —",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
